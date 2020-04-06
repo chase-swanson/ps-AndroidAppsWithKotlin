@@ -1,7 +1,7 @@
 package com.unclepunkinhead.notekeeper
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.provider.ContactsContract
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -11,17 +11,31 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
-
+    private var notePosition = POSITION_NOT_SET
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val dataManager = DataManager()
-        val adapterCourses = ArrayAdapter<CourseInfo>(this, android.R.layout.simple_spinner_item, dataManager.courses.values.sortedBy { course ->  course.title  }.toList())
+        val adapterCourses = ArrayAdapter(this, android.R.layout.simple_spinner_item, DataManager.courses.values.sortedBy { course ->  course.title  }.toList())
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinnerCourses.adapter = adapterCourses
+
+        notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
+
+        if (notePosition != POSITION_NOT_SET) {
+            val note = DataManager.notes[notePosition]
+            textNoteTitle.setText(note.title)
+            textNoteText.setText(note.text)
+
+            val coursePosition = DataManager.courses.values.indexOf(note.course)
+            spinnerCourses.setSelection(coursePosition)
+        }
+    }
+
+    private fun displayNote() {
+        TODO("Not yet implemented")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
