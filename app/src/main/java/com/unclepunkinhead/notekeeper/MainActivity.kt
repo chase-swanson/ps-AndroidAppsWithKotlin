@@ -1,7 +1,6 @@
 package com.unclepunkinhead.notekeeper
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -22,20 +21,24 @@ class MainActivity : AppCompatActivity() {
 
         spinnerCourses.adapter = adapterCourses
 
-        notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
+        notePosition = savedInstanceState?.getInt(NOTE_POSITION, POSITION_NOT_SET) ?: intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET)
 
-        if (notePosition != POSITION_NOT_SET) {
-            val note = DataManager.notes[notePosition]
-            textNoteTitle.setText(note.title)
-            textNoteText.setText(note.text)
-
-            val coursePosition = DataManager.courses.values.indexOf(note.course)
-            spinnerCourses.setSelection(coursePosition)
+        if (notePosition != POSITION_NOT_SET)
+            displayNote()
+        else {
+            DataManager.notes.add(NoteInfo())
+            notePosition = DataManager.notes.lastIndex
         }
     }
 
     private fun displayNote() {
-        TODO("Not yet implemented")
+        val note = DataManager.notes[notePosition]
+        textNoteTitle.setText(note.title)
+        textNoteText.setText(note.text)
+
+        val coursePosition = DataManager.courses.values.indexOf(note.course)
+        spinnerCourses.setSelection(coursePosition)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -49,8 +52,49 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
+            R.id.action_next -> {
+                moveNext()
+                return true
+            }
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun moveNext() {
+        ++notePosition
+        displayNote()
+        invalidateOptionsMenu()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if(notePosition >= DataManager.notes.lastIndex) {
+            val menuItem = menu?.findItem(R.id.action_next)
+            if(menuItem != null) {
+                menuItem.icon = getDrawable(R.drawable.ic_baseline_block_24)
+                menuItem.isEnabled = false
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveNote()
+    }
+
+    private fun saveNote() {
+        val note = DataManager.notes[notePosition]
+
+        note.title = textNoteTitle.text.toString()
+        note.text = textNoteText.text.toString()
+        note.course = spinnerCourses.selectedItem as CourseInfo
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(NOTE_POSITION, notePosition)
+
     }
 }

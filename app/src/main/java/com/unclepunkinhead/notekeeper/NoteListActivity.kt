@@ -23,8 +23,13 @@ class NoteListActivity : AppCompatActivity() {
 
         listNotes.setOnItemClickListener{parent, view, position, id ->
             val activity = Intent(this, MainActivity::class.java)
-            activity.putExtra(EXTRA_NOTE_POSITION, position)
+            activity.putExtra(NOTE_POSITION, position)
             startActivity(activity)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (listNotes.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 }
