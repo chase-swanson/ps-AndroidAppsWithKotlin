@@ -12,7 +12,6 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 
-// @RunWith(AndroidJUnit4::class)
 internal class CreateNewNoteTest {
 
     @Rule @JvmField
