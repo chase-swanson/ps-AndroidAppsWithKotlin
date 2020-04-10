@@ -10,9 +10,12 @@ plugins {
     id "jacoco"
 }
 
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
 jacoco {
     toolVersion = "$jacocoVersion"
-    reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
 //tasks.jacocoTestReport() {
@@ -69,6 +72,7 @@ android {
 
     testOptions {
         animationsDisabled true
+        execution 'ANDROID_TEST_ORCHESTRATOR'
 
         unitTests {
             includeAndroidResources = true
@@ -94,6 +98,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
     testImplementation 'junit:junit:4.13'
+
+    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
