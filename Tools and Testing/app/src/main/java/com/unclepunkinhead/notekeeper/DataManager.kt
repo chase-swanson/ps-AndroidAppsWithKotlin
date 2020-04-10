@@ -44,14 +44,17 @@ object DataManager {
         var note = NoteInfo(course, "Dynamic intent resolution",
             "Wow, intents allow components to be resolved at runtime")
         notes.add(note)
+
         note = NoteInfo(course, "Delegating intents",
             "PendingIntents are powerful; they delegate much more than just a component invocation")
         notes.add(note)
 
         course = courses["android_async"]!!
+
         note = NoteInfo(course, "Service default threads",
             "Did you know that by default an Android Service will tie up the UI thread?")
         notes.add(note)
+
         note = NoteInfo(course, "Long running operations",
             "Foreground Services can be tied to a notification icon")
         notes.add(note)
