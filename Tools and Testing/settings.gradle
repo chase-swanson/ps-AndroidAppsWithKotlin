@@ -1,2 +1,2 @@
+rootProject.name='NoteKeeper'
 include ':app'
-rootProject.name = "NoteKeeper"
