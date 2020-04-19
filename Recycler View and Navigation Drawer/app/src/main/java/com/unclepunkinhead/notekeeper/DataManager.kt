@@ -17,7 +17,7 @@ object DataManager {
 
     fun findNote(course: CourseInfo, noteTitle: String, noteText: String): NoteInfo? {
         for (note in notes)
-            if (course == note.course && note.title == note.title && noteText === note.text)
+            if (course == note.course && noteTitle == note.title && noteText === note.text)
                 return note
 
         return null

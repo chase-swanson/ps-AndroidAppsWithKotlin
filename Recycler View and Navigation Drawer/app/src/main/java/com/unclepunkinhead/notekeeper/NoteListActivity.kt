@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import kotlinx.android.synthetic.main.activity_note_list.*
 import kotlinx.android.synthetic.main.content_note_list.*
@@ -19,17 +21,11 @@ class NoteListActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
-        listNotes.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, DataManager.notes)
+        listItems.layoutManager = LinearLayoutManager(this)
 
-        listNotes.setOnItemClickListener{parent, view, position, id ->
-            val activity = Intent(this, MainActivity::class.java)
-            activity.putExtra(NOTE_POSITION, position)
-            startActivity(activity)
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        (listNotes.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 }
